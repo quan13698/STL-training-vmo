@@ -1,7 +1,8 @@
-import { Controller, Post, Body, BadRequestException } from '@nestjs/common';
+import { Controller, Post, Body, BadRequestException, Get, UseGuards } from '@nestjs/common';
 import { registerDTO } from '../user/register.dto';
 import { UserService } from '../user/user.service';
 import { AuthService } from './auth.service';
+import { JwtAuthGuard } from './jwt-auth.guard';
 import { loginDTO } from './login.dto';
 
 @Controller('auth')
@@ -10,6 +11,17 @@ export class AuthController {
         private userService: UserService,
         private authService: AuthService
     ) {}
+
+    @Get('public')
+    publicApi() {
+        return 'its public api'
+    }
+
+    @Get('private')
+    @UseGuards(JwtAuthGuard)
+    privateApi() {
+        return 'pass jwt'
+    }
 
     @Post('register')
     async register(@Body() registerDTO: registerDTO) {
