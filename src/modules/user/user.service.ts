@@ -5,6 +5,7 @@ import { loginDTO } from '../auth/login.dto';
 import { registerDTO } from './register.dto';
 import { IUser } from './user.schema';
 import * as bcrypt from 'bcrypt'
+import { Payload } from '../auth/payload';
 
 @Injectable()
 export class UserService {
@@ -40,5 +41,10 @@ export class UserService {
         const showUserInfo = user.toObject();
         delete showUserInfo['password'];
         return showUserInfo
+    }
+
+    async findByPayload(payload: Payload) {
+        const { email } = payload;
+        return await this.userModel.findOne({ email});
     }
 }
